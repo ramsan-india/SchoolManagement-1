@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using SchoolManagement.API.Authorization;
 using SchoolManagement.Application.Interfaces;
 using SchoolManagement.Application.Services;
@@ -10,6 +16,7 @@ using SchoolManagement.Infrastructure.Configuration;
 using SchoolManagement.Infrastructure.Services;
 using SchoolManagement.Persistence;
 using SchoolManagement.Persistence.Repositories;
+using System.Text;
 
 namespace SchoolManagement.API
 {
@@ -26,7 +33,7 @@ namespace SchoolManagement.API
         {
             // Database Configuration
             services.AddDbContext<SchoolManagementDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                options.UseSqlServer(Configuration.GetConnectionString("SchoolManagementDbConnectionString"),
                     b => b.MigrationsAssembly("SchoolManagement.API")));
 
             // Authentication & Authorization
@@ -58,7 +65,7 @@ namespace SchoolManagement.API
             });
 
             // Dependency Injection
-
+            services.AddHttpContextAccessor();
             // Menu and Permission Services
             services.AddScoped<IMenuRepository, MenuRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
@@ -66,11 +73,10 @@ namespace SchoolManagement.API
             services.AddScoped<IRoleMenuPermissionRepository, RoleMenuPermissionRepository>();
             services.AddScoped<IMenuPermissionService, MenuPermissionService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             // Authorization Handlers
-            services.AddScoped<IAuthorizationHandler, MenuPermissionHandler>();
-
-            
+            services.AddScoped<IAuthorizationHandler, MenuPermissionHandler>();           
 
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
@@ -151,8 +157,8 @@ namespace SchoolManagement.API
             });
 
             services.AddControllers();
-            services.AddHealthChecks()
-                .AddDbContextCheck<SchoolManagementDbContext>();
+            //services.AddHealthChecks()
+            //    .AddDbContextCheck<SchoolManagementDbContext>();
 
             // Caching
             services.AddStackExchangeRedisCache(options =>
@@ -180,11 +186,12 @@ namespace SchoolManagement.API
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                endpoints.MapHealthChecks("/health");
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllers();
+            //    endpoints.MapHealthChecks("/health");
+            //});
+
         }
     }
 }

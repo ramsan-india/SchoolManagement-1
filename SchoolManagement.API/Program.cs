@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagement.API;
+using SchoolManagement.API.Middleware;
 using SchoolManagement.Infrastructure.Data;
 using SchoolManagement.Persistence;
+using System.Threading.RateLimiting;
 
 public partial class Program
 {
@@ -13,11 +16,18 @@ public partial class Program
         startup.ConfigureServices(builder.Services);
         //startup.ConfigureMenuServices(builder.Services);
 
+        
+
         var app = builder.Build();
         startup.Configure(app, app.Environment);
 
         // Database Migration and Seeding
         await InitializeDatabaseAsync(app);
+
+        
+
+        //// Health Check Endpoint
+        //app.UseHealthChecks("/health");
 
         app.Run();
     }

@@ -69,7 +69,7 @@ namespace SchoolManagement.Persistence.Repositories
                 return;
             }
 
-            var userRole = new UserRole(userId, roleId, expiresAt);
+            var userRole = new Domain.Entities.UserRole(userId, roleId, expiresAt);
             _context.UserRoles.Add(userRole);
             await _context.SaveChangesAsync();
         }

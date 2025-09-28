@@ -24,6 +24,7 @@ namespace SchoolManagement.Domain.Entities
         public UserType UserType { get; private set; }
         public Guid? StudentId { get; private set; }
         public Guid? EmployeeId { get; private set; }
+        public List<RefreshToken> RefreshTokens { get; private set; }
 
         // Navigation Properties
         public virtual Student Student { get; private set; }
@@ -51,6 +52,7 @@ namespace SchoolManagement.Domain.Entities
             PhoneVerified = false;
             LoginAttempts = 0;
             UserRoles = new List<UserRole>();
+            RefreshTokens = new List<RefreshToken>();
         }
 
         // Methods to modify properties
@@ -130,6 +132,26 @@ namespace SchoolManagement.Domain.Entities
         {
             LockedUntil = null;
             LoginAttempts = 0;
+        }
+
+        public void Deactivate()
+        {
+            IsActive = false;
+        }
+
+        public void Activate()
+        {
+            IsActive = true;
+        }
+
+        public void AddRefreshToken(RefreshToken token)
+        {
+            RefreshTokens.Add(token);
+        }
+
+        public void RemoveRefreshToken(RefreshToken token)
+        {
+            RefreshTokens.Remove(token);
         }
     }
 }

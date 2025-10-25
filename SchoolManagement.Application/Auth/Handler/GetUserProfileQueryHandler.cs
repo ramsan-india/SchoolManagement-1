@@ -2,6 +2,7 @@
 using SchoolManagement.Application.Auth.Queries;
 using SchoolManagement.Application.DTOs;
 using SchoolManagement.Application.Interfaces;
+using SchoolManagement.Domain.Enums;
 using SchoolManagement.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -26,13 +27,17 @@ namespace SchoolManagement.Application.Auth.Handler
             if (user == null)
                 throw new NotFoundException("User not found");
 
+            string roleName = Enum.IsDefined(typeof(UserType), user.UserType)
+            ? ((UserType)user.UserType).ToString()
+            : "Unknown";
+
             return new UserDto
             {
                 Id = user.Id.ToString(),
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Role = user.UserType.ToString()
+                Roles = new List<string> { roleName }
             };
         }
     }

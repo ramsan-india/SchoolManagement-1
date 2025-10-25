@@ -62,6 +62,10 @@ namespace SchoolManagement.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -69,7 +73,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -119,6 +122,12 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -129,7 +138,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -138,6 +146,51 @@ namespace SchoolManagement.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Attendances");
+                });
+
+            modelBuilder.Entity("SchoolManagement.Domain.Entities.AuditLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EntityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EntityName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserAgent")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AuditLogs");
                 });
 
             modelBuilder.Entity("SchoolManagement.Domain.Entities.Class", b =>
@@ -174,11 +227,14 @@ namespace SchoolManagement.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -226,6 +282,10 @@ namespace SchoolManagement.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -233,7 +293,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -281,11 +340,16 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -331,6 +395,10 @@ namespace SchoolManagement.Persistence.Migrations
                     b.Property<decimal>("MinSalary")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -339,7 +407,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -416,6 +483,12 @@ namespace SchoolManagement.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -423,7 +496,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -484,6 +556,12 @@ namespace SchoolManagement.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -491,7 +569,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -542,6 +619,12 @@ namespace SchoolManagement.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -555,7 +638,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -605,6 +687,12 @@ namespace SchoolManagement.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -619,7 +707,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -682,6 +769,12 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -692,7 +785,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -711,7 +803,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Component")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -727,7 +818,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -737,7 +827,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Icon")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -759,9 +848,14 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Route")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
@@ -773,7 +867,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -784,6 +877,68 @@ namespace SchoolManagement.Persistence.Migrations
                     b.HasIndex("ParentMenuId", "SortOrder");
 
                     b.ToTable("Menus");
+                });
+
+            modelBuilder.Entity("SchoolManagement.Domain.Entities.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedIP")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Recipient")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RetryCount")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime?>("SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("SchoolManagement.Domain.Entities.PayrollRecord", b =>
@@ -830,6 +985,10 @@ namespace SchoolManagement.Persistence.Migrations
                     b.Property<DateTime?>("ProcessedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -843,7 +1002,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("WorkingDays")
@@ -919,6 +1077,12 @@ namespace SchoolManagement.Persistence.Migrations
                     b.Property<Guid>("ReviewerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -926,7 +1090,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -991,11 +1154,16 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1007,6 +1175,59 @@ namespace SchoolManagement.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("SchoolManagement.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedIP")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("SchoolManagement.Domain.Entities.Role", b =>
@@ -1027,7 +1248,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -1053,11 +1273,16 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1118,11 +1343,16 @@ namespace SchoolManagement.Persistence.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1164,11 +1394,16 @@ namespace SchoolManagement.Persistence.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1214,11 +1449,16 @@ namespace SchoolManagement.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1291,6 +1531,12 @@ namespace SchoolManagement.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<Guid>("SectionId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1306,7 +1552,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1372,6 +1617,12 @@ namespace SchoolManagement.Persistence.Migrations
                     b.Property<int>("Relationship")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1379,7 +1630,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1448,12 +1698,17 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<bool>("PhoneVerified")
                         .HasColumnType("bit");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<Guid?>("StudentId")
                         .HasColumnType("uniqueidentifier");
@@ -1462,7 +1717,6 @@ namespace SchoolManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserType")
@@ -1524,11 +1778,16 @@ namespace SchoolManagement.Persistence.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
@@ -1780,6 +2039,17 @@ namespace SchoolManagement.Persistence.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("Reviewer");
+                });
+
+            modelBuilder.Entity("SchoolManagement.Domain.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("SchoolManagement.Domain.Entities.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SchoolManagement.Domain.Entities.RoleMenuPermission", b =>
@@ -2081,6 +2351,8 @@ namespace SchoolManagement.Persistence.Migrations
 
             modelBuilder.Entity("SchoolManagement.Domain.Entities.User", b =>
                 {
+                    b.Navigation("RefreshTokens");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

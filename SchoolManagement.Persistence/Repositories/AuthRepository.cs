@@ -28,8 +28,25 @@ namespace SchoolManagement.Persistence.Repositories
         public async Task<User> GetByIdAsync(Guid id)
         {
             return await _context.Users
+                .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
                 .Include(u => u.RefreshTokens)
                 .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+
+        public async Task<IEnumerable<User>> GetAllAsync()
+        {
+            return await _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .ToListAsync();
+        }
+        public async Task<User> GetByUsernameAsync(string username)
+        {
+            return await _context.Users
+                .Include(u => u.RefreshTokens)
+                .FirstOrDefaultAsync(u => u.Username == username);
         }
 
         public async Task AddAsync(User user)

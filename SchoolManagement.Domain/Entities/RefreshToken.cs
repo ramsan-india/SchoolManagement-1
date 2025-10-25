@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace SchoolManagement.Domain.Entities
 {
-    public class RefreshToken
+    public class RefreshToken: BaseEntity
     {
         public Guid Id { get; private set; }
         public string Token { get; private set; }
         public DateTime ExpiryDate { get; private set; }
         public bool IsRevoked { get; private set; }
-        public DateTime CreatedAt { get; private set; }
         public Guid UserId { get; private set; }
         public User User { get; private set; }
 

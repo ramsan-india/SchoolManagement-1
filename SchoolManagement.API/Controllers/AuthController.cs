@@ -123,6 +123,7 @@ namespace SchoolManagement.API.Controllers
         {
             var command = new RegisterCommand
             {
+                Username= request.Username,
                 Email = request.Email,
                 Password = request.Password,
                 FirstName = request.FirstName,

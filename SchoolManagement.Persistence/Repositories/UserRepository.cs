@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SchoolManagement.Application.Interfaces;
 using SchoolManagement.Domain.Entities;
 using SchoolManagement.Domain.Enums;
@@ -7,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserRoleEntity = SchoolManagement.Domain.Entities.UserRole;
+using UserRoleEnum = SchoolManagement.Domain.Enums.UserRole;
+
 
 namespace SchoolManagement.Persistence.Repositories
 {
@@ -19,6 +21,7 @@ namespace SchoolManagement.Persistence.Repositories
             _context = context;
         }
 
+        // ✅ Always load user with tracking and roles
         public async Task<User> GetByIdAsync(Guid id)
         {
             return await _context.Users
@@ -45,45 +48,62 @@ namespace SchoolManagement.Persistence.Repositories
 
         public async Task<User> CreateAsync(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _context.Users.AddAsync(user);
             return user;
         }
 
         public async Task<User> UpdateAsync(User user)
         {
             _context.Users.Update(user);
-            await _context.SaveChangesAsync();
             return user;
         }
 
-        public async Task AssignRoleAsync(Guid userId, Guid roleId, DateTime? expiresAt = null)
+        /// <summary>
+        /// Assigns a role to a user (tracked safely).
+        /// </summary>
+        public async Task AssignRoleAsync(Guid userId, Guid roleId, DateTime assignAt, bool isActive, DateTime? expiresAt = null)
         {
-            var existingUserRole = await _context.UserRoles
-                .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == roleId && !ur.IsDeleted);
+            // ✅ Load user with roles, tracked
+            var user = await _context.Users
+                .Include(u => u.UserRoles)
+                .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
+
+            if (user == null)
+                throw new InvalidOperationException($"User with ID {userId} not found.");
+
+            var existingUserRole = user.UserRoles
+                .FirstOrDefault(ur => ur.RoleId == roleId && !ur.IsDeleted);
 
             if (existingUserRole != null)
             {
                 if (expiresAt.HasValue)
                     existingUserRole.ExtendRole(expiresAt.Value);
-                return;
             }
+            else
+            {
+                // ✅ Add role via navigation property (ensures tracking)
+                var userRole = new UserRoleEntity(userId, roleId, DateTime.UtcNow, isActive, expiresAt);
+                
 
-            var userRole = new Domain.Entities.UserRole(userId, roleId, expiresAt);
-            _context.UserRoles.Add(userRole);
-            await _context.SaveChangesAsync();
+                user.UserRoles.Add(userRole);
+            }
         }
 
         public async Task RevokeRoleAsync(Guid userId, Guid roleId)
         {
-            var userRole = await _context.UserRoles
-                .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == roleId && !ur.IsDeleted);
+            var user = await _context.Users
+                .Include(u => u.UserRoles)
+                .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
+
+            if (user == null)
+                throw new InvalidOperationException($"User with ID {userId} not found.");
+
+            var userRole = user.UserRoles
+                .FirstOrDefault(ur => ur.RoleId == roleId && !ur.IsDeleted);
 
             if (userRole != null)
             {
                 userRole.DeactivateRole();
-                _context.UserRoles.Update(userRole);
-                await _context.SaveChangesAsync();
             }
         }
 
@@ -102,9 +122,9 @@ namespace SchoolManagement.Persistence.Repositories
             var user = await GetByIdAsync(id);
             if (user == null) return false;
 
-            // Use the actual soft delete method from your User entity
-            //user.Delete(); // Replace with your actual method name (SoftDelete, MarkAsDeleted, etc.)
-            await UpdateAsync(user);
+            user.MarkAsDeleted(); // Ensure your entity has this method
+            _context.Users.Update(user);
+
             return true;
         }
 

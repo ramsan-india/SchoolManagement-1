@@ -11,6 +11,7 @@ namespace SchoolManagement.Application.Interfaces
     {
         Task<User> GetByEmailAsync(string email);
         Task<User> GetByIdAsync(Guid id);
+        Task<IEnumerable<User>> GetAllAsync();
         Task AddAsync(User user);
         Task UpdateAsync(User user);
         Task<RefreshToken> GetRefreshTokenAsync(string token);

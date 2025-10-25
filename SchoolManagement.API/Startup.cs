@@ -44,7 +44,7 @@ namespace SchoolManagement.API
                     options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
                 });
 
-            // API Explorer - REQUIRED FOR SWAGGER
+            // API Explorer
             services.AddEndpointsApiExplorer();
 
             // Database Configuration
@@ -109,14 +109,17 @@ namespace SchoolManagement.API
             services.AddScoped<IAttendanceCalculationService, AttendanceCalculationService>();
             services.AddScoped<ISalaryCalculationService, SalaryCalculationService>();
 
-            // Auth Services - FIXED REGISTRATION
+            // Auth Services
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<TokenService>(); // Register concrete class first
             services.AddScoped<ITokenService, CachedTokenService>(); // Register decorator
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<IAuditService, AuditService>();
+            //services.AddSingleton<INotificationQueue, InMemoryNotificationQueue>();
+            //services.AddHostedService<NotificationProcessorService>();
 
-            // MediatR for CQRS - SIMPLIFIED VERSION
+
+            // MediatR for CQRS
             services.AddMediatR(typeof(CreateStudentCommand).Assembly);
             if (typeof(LoginCommandHandler).Assembly != typeof(CreateStudentCommand).Assembly)
             {
@@ -232,7 +235,7 @@ namespace SchoolManagement.API
             {
                 options.AddPolicy("AllowReactApp", policy =>
                 {
-                    policy.WithOrigins("http://localhost:3000", "https://localhost:3001", "https://schoolmanagement.com")
+                    policy.WithOrigins("http://192.168.241.175:8080", "https://localhost:8080", "http://localhost:8080")
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials();
@@ -321,7 +324,7 @@ namespace SchoolManagement.API
                 app.UseHsts();
             }
 
-            // Middleware Pipeline - PROPER ORDER
+            // Middleware Pipeline
             app.UseHttpsRedirection();
 
             // Custom middleware (only if classes exist)

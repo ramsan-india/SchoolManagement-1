@@ -11,6 +11,9 @@ namespace SchoolManagement.Application.DTOs
     public class RegisterRequestDto
     {
         [Required]
+        public string Username { get; set; } = string.Empty;
+
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
 

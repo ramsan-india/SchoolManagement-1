@@ -55,7 +55,7 @@ namespace SchoolManagement.API.Controllers
         [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<ActionResult<IEnumerable<MenuDto>>> GetMenuHierarchy()
         {
-            var query = new GetMenuHierarchyQuery();
+            var query = new GetAllMenusQuery();
             var menus = await _mediator.Send(query);
             return Ok(menus);
         }

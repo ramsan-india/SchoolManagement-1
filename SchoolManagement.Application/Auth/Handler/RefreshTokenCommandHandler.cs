@@ -3,6 +3,7 @@ using SchoolManagement.Application.Auth.Commands;
 using SchoolManagement.Application.DTOs;
 using SchoolManagement.Application.Interfaces;
 using SchoolManagement.Domain.Entities;
+using SchoolManagement.Domain.Enums;
 using SchoolManagement.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,9 @@ namespace SchoolManagement.Application.Auth.Handler
             await _unitOfWork.AuthRepository.SaveRefreshTokenAsync(newRefreshToken);
             await _unitOfWork.AuthRepository.UpdateAsync(user);
             await _unitOfWork.SaveChangesAsync();
+            string roleName = Enum.IsDefined(typeof(UserType), user.UserType)
+            ? ((UserType)user.UserType).ToString()
+            : "Unknown";
 
             return new AuthResponseDto
             {
@@ -65,7 +69,7 @@ namespace SchoolManagement.Application.Auth.Handler
                     Email = user.Email,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    Role = user.UserRoles.ToString()
+                    Roles = new List<string> { roleName }
                 }
             };
         }

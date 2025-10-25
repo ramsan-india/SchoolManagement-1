@@ -40,36 +40,40 @@ namespace SchoolManagement.Application.Auth.Handler
             var user = new User(
                 request.Username,
                 request.Email,
-                hashedPassword,
                 request.FirstName,
                 request.LastName,
+                hashedPassword,
                 (UserType)request.Role); // Cast UserRole to UserType
 
-            var accessToken = _tokenService.GenerateAccessToken(user);
-            var refreshTokenValue = _tokenService.GenerateRefreshToken();
+            //var accessToken = _tokenService.GenerateAccessToken(user);
+            //var refreshTokenValue = _tokenService.GenerateRefreshToken();
 
-            var refreshToken = new RefreshToken(
-                refreshTokenValue,
-                DateTime.UtcNow.AddDays(7),
-                user.Id);
+            //var refreshToken = new RefreshToken(
+            //    refreshTokenValue,
+            //    DateTime.UtcNow.AddDays(7),
+            //    user.Id);
 
-            user.AddRefreshToken(refreshToken);
+            //user.AddRefreshToken(refreshToken);
 
-            await _unitOfWork.AuthRepository.AddAsync(user);
-            await _unitOfWork.AuthRepository.SaveRefreshTokenAsync(refreshToken);
+            //await _unitOfWork.AuthRepository.AddAsync(user);
+            //await _unitOfWork.AuthRepository.SaveRefreshTokenAsync(refreshToken);
             await _unitOfWork.SaveChangesAsync();
+
+            string roleName = Enum.IsDefined(typeof(UserType), user.UserType)
+            ? ((UserType)user.UserType).ToString()
+            : "Unknown";
 
             return new AuthResponseDto
             {
-                AccessToken = accessToken,
-                RefreshToken = refreshTokenValue,
+                //AccessToken = accessToken,
+                //RefreshToken = refreshTokenValue,
                 User = new UserDto
                 {
                     Id = user.Id.ToString(),
                     Email = user.Email,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    Role = user.UserRoles.ToString()
+                    Roles = new List<string> { roleName }
                 }
             };
         }

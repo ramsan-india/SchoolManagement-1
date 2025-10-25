@@ -18,7 +18,8 @@ namespace SchoolManagement.Application.Interfaces
         Task<bool> DeleteAsync(Guid id);
         Task<IEnumerable<User>> GetAllAsync();
         Task<IEnumerable<User>> GetByUserTypeAsync(UserType userType);
-        Task AssignRoleAsync(Guid userId, Guid roleId, DateTime? expiresAt = null);
+        Task AssignRoleAsync(Guid userId, Guid roleId, DateTime assignAt, bool isActive, DateTime? expiresAt = null);
+        //Task AssignRoleAsync(User user);
         Task RevokeRoleAsync(Guid userId, Guid roleId);
         Task<IEnumerable<Role>> GetUserRolesAsync(Guid userId);
     }

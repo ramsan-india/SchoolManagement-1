@@ -2,7 +2,9 @@
 using SchoolManagement.Application.Auth.Commands;
 using SchoolManagement.Application.DTOs;
 using SchoolManagement.Application.Interfaces;
+using SchoolManagement.Application.Models;
 using SchoolManagement.Domain.Entities;
+using SchoolManagement.Domain.Enums;
 using SchoolManagement.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Auth.Handler
 {
-    public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDto>
+    public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResponseDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPasswordService _passwordService;
@@ -28,17 +30,17 @@ namespace SchoolManagement.Application.Auth.Handler
             _tokenService = tokenService;
         }
 
-        public async Task<AuthResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<Result<AuthResponseDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.AuthRepository.GetByEmailAsync(request.Email);
             if (user == null)
-                throw new AuthenticationException("Invalid email or password");
+                return Result<AuthResponseDto>.Failure("Invalid email or password");
 
             if (!user.IsActive)
-                throw new AuthenticationException("Account is deactivated");
+                return Result<AuthResponseDto>.Failure("Account is deactivated");
 
             if (!_passwordService.VerifyPassword(request.Password, user.PasswordHash))
-                throw new AuthenticationException("Invalid email or password");
+                return Result<AuthResponseDto>.Failure("Invalid email or password");
 
             var accessToken = _tokenService.GenerateAccessToken(user);
             var refreshTokenValue = _tokenService.GenerateRefreshToken();
@@ -55,7 +57,11 @@ namespace SchoolManagement.Application.Auth.Handler
             await _unitOfWork.AuthRepository.UpdateAsync(user);
             await _unitOfWork.SaveChangesAsync();
 
-            return new AuthResponseDto
+            string roleName = Enum.IsDefined(typeof(UserType), user.UserType)
+            ? ((UserType)user.UserType).ToString()
+            : "Unknown";
+
+            var response = new AuthResponseDto
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshTokenValue,
@@ -65,9 +71,11 @@ namespace SchoolManagement.Application.Auth.Handler
                     Email = user.Email,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    Role = user.UserRoles.ToString()
+                    Roles = new List<string> { roleName }
                 }
             };
+
+            return Result<AuthResponseDto>.Success(response);
         }
     }
 }

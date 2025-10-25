@@ -12,12 +12,10 @@ namespace SchoolManagement.Application.Interfaces
         IEmployeeRepository EmployeeRepository { get; }
         IUserRepository UserRepository { get; }
         IRoleRepository RoleRepository { get; }
-        //ICourseRepository CourseRepository { get; }
+        IUserRoleRepository UserRoleRepository { get; }
         IStudentRepository StudentRepository { get; }
         IAttendanceRepository AttendanceRepository { get; }
-        //ILeaveRepository LeaveRepository { get; }
-        //IPerformanceRepository PerformanceRepository { get; }
-        //IPayrollRepository PayrollRepository { get; }
+        IRoleMenuPermissionRepository RoleMenuPermissionRepository { get; } // <-- Add this line
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();

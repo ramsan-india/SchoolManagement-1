@@ -4,6 +4,7 @@ using SchoolManagement.API;
 using SchoolManagement.API.Middleware;
 using SchoolManagement.Infrastructure.Data;
 using SchoolManagement.Persistence;
+using Serilog;
 using System.Threading.RateLimiting;
 
 public partial class Program
@@ -11,6 +12,19 @@ public partial class Program
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Host.UseSerilog((context, configuration) =>
+        {
+            // Read all Serilog configuration from appsettings.json
+            configuration.ReadFrom.Configuration(context.Configuration);
+        });
+
+        // ------------------- Configuration -------------------
+        builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables();
 
         var startup = new Startup(builder.Configuration);
         startup.ConfigureServices(builder.Services);

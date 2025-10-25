@@ -8,9 +8,12 @@ namespace SchoolManagement.Domain.Entities
         public DateTime CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public string CreatedBy { get; protected set; }
-        public string UpdatedBy { get; protected set; }
+        public string? UpdatedBy { get; protected set; }
         public bool IsDeleted { get; protected set; }
         public string CreatedIP { get; set; }
+
+        // Concurrency token for optimistic concurrency
+        public byte[] RowVersion { get; set; }
 
         protected BaseEntity()
         {
@@ -33,8 +36,8 @@ namespace SchoolManagement.Domain.Entities
             CreatedIP = ipAddress;
 
             // Also set Updated fields on insert to avoid SQL NOT NULL errors
-            UpdatedAt = DateTime.UtcNow;
-            UpdatedBy = user;
+            //UpdatedAt = DateTime.UtcNow;
+            //UpdatedBy = user;
         }
 
         public void SetUpdated(string user, string ipAddress)
